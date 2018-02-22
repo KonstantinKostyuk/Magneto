@@ -1,4 +1,4 @@
-//T0005 - Test
+//Magneto
 
 // Pololu Github - https://github.com/pololu/dual-vnh5019-motor-shield/
 #include <DualVNH5019MotorShield.h>
@@ -21,22 +21,22 @@
 // --- define Variables
 // Speed: 0 is stopped, 400 is full speed, -400 reverce 
 int FULL_SPEED = 400;         //MAX motor speed
-int m1Speed = FULL_SPEED / 2; //Initially motor speed
-int m2Speed = FULL_SPEED / 2; //Initially motor speed
+//int m1Speed = FULL_SPEED / 2; //Initially motor speed
+//int m2Speed = FULL_SPEED / 2; //Initially motor speed
 int REVERSE_SPEED = 200;      //Reverse motor speed
 int TURN_SPEED = 250;         //Turn motor 
 int FORWARD_SPEED = 250;      //Forward motor speed
 int STOP = 0;                 //Stop motor
-int Border_Distance = 1000;    //MAX distance, if bigger = error = 0
+//int Border_Distance = 1000;    //MAX distance, if bigger = error = 0
 
 
 //Variables 
-byte PS0, PS1, PS2;      //Robot detection(Proximity sensor) vars
+byte PS_L, PS_C, PS_R;   //Robot detection(Proximity sensor) vars
 byte RDM;                //Robot detection Matrix
 byte First_RDM=B10101010;//Robot detection Matrix, loop before
 byte buttonState = 0;    //Start buttun
 byte RC_Start_State = 0; //Start Module satart state
-byte RC_Stop_State = 0;  //Kill Module satart state 
+//byte RC_Stop_State = 0;  //Kill Module satart state 
 byte goPressed = 0;      //button pressed once
 byte goStart = 0;        //started once
 byte rotation = LEFT;    //defult rotation to left
@@ -47,12 +47,12 @@ DualVNH5019MotorShield motors; // MotorDriver create
 
 void RDMprint()
 {
-Serial.print("PS0:");
-Serial.print(PS0);
-Serial.print(", PS1:");
-Serial.print(PS1);
-Serial.print(", PS2:");
-Serial.print(PS2);
+Serial.print("PS_L:");
+Serial.print(PS_L);
+Serial.print(", PS_C:");
+Serial.print(PS_C);
+Serial.print(", PS_R:");
+Serial.print(PS_R);
 Serial.print(", Start:");
 Serial.print(RC_Start_State);
 //Serial.print(", Stop:");
@@ -64,23 +64,23 @@ Serial.println(RDM, BIN);
 void SensorsRead()
 {
   // --- Read Proximity sensors 
-  PS0=digitalRead(SM_LEFT);
-  PS1=digitalRead(SM_CNT);
-  PS2=digitalRead(SM_RIGHT);
+  PS_L=digitalRead(SM_LEFT);
+  PS_C=digitalRead(SM_CNT);
+  PS_R=digitalRead(SM_RIGHT);
 
  
   // --- Read Start-Stop astates
   RC_Start_State = digitalRead(RC_START);
-  RC_Stop_State = digitalRead(RC_KILL);
+  //RC_Stop_State = digitalRead(RC_KILL);
 
   RDM=0xFF;
   RDM=RDM<<1|1;  
   RDM=RDM<<1|1;
   RDM=RDM<<1|1;
   RDM=RDM<<1|1;
-  RDM=RDM<<1|!PS2;
-  RDM=RDM<<1|!PS1;
-  RDM=RDM<<1|!PS0;
+  RDM=RDM<<1|!PS_L;
+  RDM=RDM<<1|!PS_C;
+  RDM=RDM<<1|!PS_R;
   RDM=RDM<<1|!RC_Start_State;
   //RDM=RDM<<1|!RC_Stop_State;
   RDM=~RDM;
@@ -96,7 +96,7 @@ void setup()
   pinMode(SM_CNT, INPUT);
   pinMode(SM_RIGHT, INPUT);
   pinMode(RC_START, INPUT);
-  pinMode(RC_KILL, INPUT);
+  //pinMode(RC_KILL, INPUT);
     
   pinMode(LED_PIN, OUTPUT);
   
